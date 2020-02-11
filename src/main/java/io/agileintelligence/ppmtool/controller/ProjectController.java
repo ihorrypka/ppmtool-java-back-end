@@ -15,8 +15,12 @@ import io.agileintelligence.ppmtool.service.ProjectService;
 @RequestMapping("api/project")
 public class ProjectController {
 	
-	@Autowired
 	private ProjectService projectService;
+	
+	@Autowired
+	public ProjectController(ProjectService projectService) {
+		this.projectService = projectService;
+	}
 	
 	@PostMapping("")
 	public ResponseEntity<Project> createNewProject(@RequestBody Project project) {
