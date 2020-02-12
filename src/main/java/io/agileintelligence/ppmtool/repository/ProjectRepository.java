@@ -1,7 +1,5 @@
 package io.agileintelligence.ppmtool.repository;
 
-import java.util.List;
-
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +12,5 @@ public interface ProjectRepository extends CrudRepository<Project, Long> {
 
 	@Override
 	Iterable<Project> findAll();
-	
+		
 }
