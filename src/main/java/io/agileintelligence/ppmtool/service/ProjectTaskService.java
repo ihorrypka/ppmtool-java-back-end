@@ -1,5 +1,7 @@
 package io.agileintelligence.ppmtool.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -121,13 +123,25 @@ public class ProjectTaskService {
 	public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id,
 																	String projectTask_id) {
 		
-		ProjectTask projectTask = 
-				projectTaskRepository.findByProjectSequence(projectTask_id);
+		ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, projectTask_id);
 		
 		projectTask = updatedTask;
 		
 		return projectTaskRepository.save(projectTask);
 				
+	}
+	
+	public void deleteProjectTaskByProjectSequence(String backlog_id, String projectTask_id) {
+		
+		ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, projectTask_id);
+		
+		Backlog backlog = projectTask.getBacklog();
+		List<ProjectTask> projectTasks = backlog.getProjectTasks();
+		projectTasks.remove(projectTask);
+		backlogRepository.save(backlog);
+		
+		projectTaskRepository.delete(projectTask);
+		
 	}
 
 }
