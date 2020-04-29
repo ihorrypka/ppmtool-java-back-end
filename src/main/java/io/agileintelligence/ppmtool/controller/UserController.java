@@ -2,6 +2,7 @@ package io.agileintelligence.ppmtool.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,8 +23,9 @@ public class UserController {
 	
 	private UserService userService;
 	
+	@Autowired
 	public UserController(MapValidationErrorService mapValidationErrorService,
-															UserService userService) {
+														UserService userService) {
 		
 		this.mapValidationErrorService = mapValidationErrorService;
 		this.userService = userService;
