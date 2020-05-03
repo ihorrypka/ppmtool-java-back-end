@@ -1,13 +1,18 @@
 package io.agileintelligence.ppmtool.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
@@ -44,6 +49,9 @@ public class User implements UserDetails {
 	private Date update_At;
 	
 	// OneToMany with Project
+	@OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, 
+			mappedBy = "user", orphanRemoval = true)
+	private List<Project> projects = new ArrayList<>();
 	
 	public User() {
 		
@@ -103,6 +111,14 @@ public class User implements UserDetails {
 
 	public void setUpdate_At(Date update_At) {
 		this.update_At = update_At;
+	}
+	
+	public List<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
 	}
 
 	@PrePersist
