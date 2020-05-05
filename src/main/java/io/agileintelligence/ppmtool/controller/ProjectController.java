@@ -32,6 +32,7 @@ public class ProjectController {
 	@Autowired
 	public ProjectController(ProjectService projectService, 
 							MapValidationErrorService mapValidationErrorService) {
+		
 		this.projectService = projectService;
 		this.mapValidationErrorService = mapValidationErrorService;
 	}
@@ -47,7 +48,8 @@ public class ProjectController {
 		
 		Project theProject = projectService.saveOrUpdateProject(
 					project, principal.getName());
-		return new ResponseEntity<Project>(project, HttpStatus.CREATED);
+		
+		return new ResponseEntity<Project>(theProject, HttpStatus.CREATED);
 	} 
 	
 	@GetMapping("/{projectId}")
