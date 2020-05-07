@@ -31,10 +31,11 @@ public class ProjectController {
 	
 	@Autowired
 	public ProjectController(ProjectService projectService, 
-							MapValidationErrorService mapValidationErrorService) {
+				MapValidationErrorService mapValidationErrorService) {
 		
 		this.projectService = projectService;
 		this.mapValidationErrorService = mapValidationErrorService;
+		
 	}
 	
 	@PostMapping("")
@@ -50,6 +51,7 @@ public class ProjectController {
 					project, principal.getName());
 		
 		return new ResponseEntity<Project>(theProject, HttpStatus.CREATED);
+		
 	} 
 	
 	@GetMapping("/{projectId}")
@@ -60,12 +62,14 @@ public class ProjectController {
 				projectService.findProjectByIdentifier(projectId, principal.getName());
 		
 		return new ResponseEntity<Project>(project, HttpStatus.OK);
+		
 	}
 	
 	@GetMapping("/all")
 	public Iterable<Project> getAllProject(Principal principal) {
 		
 		return projectService.findAllProject(principal.getName());
+		
 	}
 	
 	@DeleteMapping("/{projectId}")
@@ -76,5 +80,6 @@ public class ProjectController {
 		
 		return new ResponseEntity<String>("Project with ID: '" + projectId +
 				"' was deleted!", HttpStatus.OK);
+		
 	}
 }

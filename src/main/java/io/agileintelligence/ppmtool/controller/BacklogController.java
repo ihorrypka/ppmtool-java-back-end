@@ -1,5 +1,7 @@
 package io.agileintelligence.ppmtool.controller;
 
+import java.security.Principal;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,7 @@ public class BacklogController {
 	
 	@Autowired
 	public BacklogController(ProjectTaskService projectTaskService,
-							MapValidationErrorService mapValidationErrorService) {
+				MapValidationErrorService mapValidationErrorService) {
 		
 		this.projectTaskService = projectTaskService;
 		this.mapValidationErrorService = mapValidationErrorService;
@@ -38,7 +40,8 @@ public class BacklogController {
 	
 	@PostMapping("/{backlog_id}")
 	public ResponseEntity<?> addProjectTaskToBacklog(@Valid @RequestBody ProjectTask projectTask,
-											BindingResult result, @PathVariable String backlog_id) {
+				BindingResult result, @PathVariable String backlog_id,
+				Principal principal) {
 		
 		ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
 		if (errorMap != null) {
@@ -46,21 +49,22 @@ public class BacklogController {
 		}
 		
 		ProjectTask theProjectTask = 
-				projectTaskService.addProjectTask(backlog_id, projectTask);
+				projectTaskService.addProjectTask(backlog_id, projectTask, principal.getName());
 		
 		return new ResponseEntity<ProjectTask>(theProjectTask, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/{backlog_id}")
-	public Iterable<ProjectTask>getProjectBacklog(@PathVariable String backlog_id) {
+	public Iterable<ProjectTask>getProjectBacklog(@PathVariable String backlog_id, 
+					Principal principal) {
 		
-		return projectTaskService.findBacklogById(backlog_id);
+		return projectTaskService.findBacklogById(backlog_id, principal.getName());
 		
 	}
 	
 	@GetMapping("/{backlog_id}/{projectTask_id}")
 	public ResponseEntity<?> getProjectTask(@PathVariable String backlog_id,
-											@PathVariable String projectTask_id) {
+				@PathVariable String projectTask_id) {
 		
 		ProjectTask projectTask = 
 				projectTaskService.findProjectTaskByProjectSequence(backlog_id, projectTask_id);
@@ -71,9 +75,9 @@ public class BacklogController {
 	
 	@PatchMapping("/{backlog_id}/{projectTask_id}")
 	public ResponseEntity<?> updateProjectTask(@Valid @RequestBody ProjectTask projectTask,
-												BindingResult result,
-												@PathVariable String backlog_id,
-												@PathVariable String projectTask_id) {
+					BindingResult result,
+					@PathVariable String backlog_id,
+					@PathVariable String projectTask_id) {
 		
 		ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
 		if (errorMap != null) {
@@ -89,7 +93,7 @@ public class BacklogController {
 	
 	@DeleteMapping("/{backlog_id}/{projectTask_id}") 
 	public ResponseEntity<?> deleteProjectTask(@PathVariable String backlog_id,
-												@PathVariable String projectTask_id) {
+				@PathVariable String projectTask_id) {
 		
 		projectTaskService.deleteProjectTaskByProjectSequence(backlog_id, projectTask_id);
 		
